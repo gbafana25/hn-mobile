@@ -17,7 +17,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -25,11 +28,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView
-        .OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private ArrayList<NewsItem> items = new ArrayList<>();
-    private NewsItemAdapter adapter;
+    private ArrayList<NewsItem> top_items = new ArrayList<>();
+    private ArrayList<NewsItem> show_items = new ArrayList<>();
+    private NewsItemAdapter adapter = new NewsItemAdapter(this, items);
     private int num_items_show = 30;
+    private int max_text_len = 300;
     hnapi api  = new hnapi();
 
     @Override
@@ -44,200 +49,111 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         item_list.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new NewsItemAdapter(this, items);
+        //adapter = new NewsItemAdapter(this, items);
         item_list.setAdapter(adapter);
 
         OkHttpClient client = new OkHttpClient();
 
+        // load both sections when the app starts
 
         Request top = api.getTopStories();
+        Request show = api.getShowStores();
 
-        client.newCall(top).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
+        reqCallback top_call = new reqCallback();
+        reqCallback show_call = new reqCallback();
+        client.newCall(top).enqueue(top_call);
+        client.newCall(show).enqueue(show_call);
 
-            }
+        try {
+            Response resp = top_call.get();
+            assert resp.body() != null;
+            OkHttpClient loop = new OkHttpClient();
 
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                //System.out.println(response.body().string());
+            JSONArray obj = new JSONArray(resp.body().string());
+            //System.out.println(obj);
+            for(int i = 0; i < 30; i++) {
+                Request item = api.getItem(obj.getInt(i));
+                reqCallback item_call = new reqCallback();
+                loop.newCall(item).enqueue(item_call);
+                Response item_resp = item_call.get();
+                JSONObject info = new JSONObject(item_resp.body().string());
+                String c = "";
+                if(info.has("text")) {
+                    c = info.getString("text");
+                    //System.out.println(c.length());
+                    if(c.length() > max_text_len) {
+                        c = info.getString("text").substring(0, max_text_len)+"...";
 
-                try {
-                    assert response.body() != null;
-                    OkHttpClient loop = new OkHttpClient();
-                    JSONArray obj = new JSONArray(response.body().string());
-                    //System.out.println(obj);
-                    for(int i = 0; i < num_items_show; i++) {
-                        Request it = api.getItem(obj.getInt(i));
-                        loop.newCall(it).enqueue(new Callback() {
-                            @Override
-                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            @Override
-                            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                                try {
-                                    JSONObject info = new JSONObject(response.body().string());
-                                    String c = "";
-                                    if(info.has("text")) {
-                                        c = info.getString("text");
-                                    } else if(info.has("url")) {
-                                        c = info.getString("url");
-                                    }
-                                    NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"));
-                                    items.add(itemobj);
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            adapter.notifyDataSetChanged();
-                                        }
-                                    });
-
-                                } catch (JSONException e) {
-                                    throw new RuntimeException(e);
-                                }
-
-                            }
-                        });
                     }
-
-
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                } else if(info.has("url")) {
+                    c = info.getString("url");
                 }
+                NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"));
+                top_items.add(itemobj);
+                items.add(itemobj);
+                //System.out.println(top_items.size());
+                adapter.notifyDataSetChanged();
+
+
             }
-        });
+        } catch (ExecutionException | InterruptedException | IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            Response resp = show_call.get();
+            assert resp.body() != null;
+            OkHttpClient loop = new OkHttpClient();
+
+            JSONArray obj = new JSONArray(resp.body().string());
+            //System.out.println(obj);
+            for(int i = 0; i < 30; i++) {
+                Request item = api.getItem(obj.getInt(i));
+                reqCallback item_call = new reqCallback();
+                loop.newCall(item).enqueue(item_call);
+                Response item_resp = item_call.get();
+                JSONObject info = new JSONObject(item_resp.body().string());
+                String c = "";
+                if(info.has("text")) {
+                    c = info.getString("text");
+                    //System.out.println(c.length());
+                    if(c.length() > max_text_len) {
+                        c = info.getString("text").substring(0, max_text_len)+"...";
+
+                    }
+                } else if(info.has("url")) {
+                    c = info.getString("url");
+                }
+                NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"));
+                show_items.add(itemobj);
 
 
+            }
+        } catch (ExecutionException | InterruptedException | IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int selected = menuItem.getItemId();
-        items.clear();
+        //items.clear();
         if(selected == R.id.home_btn) {
-            //System.out.println("home");
-            Request top = api.getTopStories();
-            OkHttpClient client = new OkHttpClient();
-            client.newCall(top).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    e.printStackTrace();
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    try {
-                        assert response.body() != null;
-                        OkHttpClient loop = new OkHttpClient();
-                        JSONArray obj = new JSONArray(response.body().string());
-                        //System.out.println(obj);
-                        for(int i = 0; i < num_items_show; i++) {
-                            Request it = api.getItem(obj.getInt(i));
-                            loop.newCall(it).enqueue(new Callback() {
-                                @Override
-                                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                                @Override
-                                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                                    try {
-                                        JSONObject info = new JSONObject(response.body().string());
-                                        String c = "";
-                                        if(info.has("text")) {
-                                            c = info.getString("text");
-                                        } else if(info.has("url")) {
-                                            c = info.getString("url");
-                                        }
-                                        NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"));
-                                        items.add(itemobj);
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                        });
-
-                                    } catch (JSONException e) {
-                                        throw new RuntimeException(e);
-                                    }
-
-                                }
-                            });
-                        }
-
-
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            });
+            items.clear();
+            items.addAll(top_items);
+            adapter.notifyDataSetChanged();
             return true;
         } else if (selected == R.id.show_btn){
-            //System.out.println("show");
-            Request show = api.getShowStores();
-            OkHttpClient client = new OkHttpClient();
-            client.newCall(show).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    e.printStackTrace();
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    try {
-                        assert response.body() != null;
-                        OkHttpClient loop = new OkHttpClient();
-                        JSONArray obj = new JSONArray(response.body().string());
-                        //System.out.println(obj);
-                        for(int i = 0; i < num_items_show; i++) {
-                            Request it = api.getItem(obj.getInt(i));
-                            loop.newCall(it).enqueue(new Callback() {
-                                @Override
-                                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                                @Override
-                                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                                    try {
-                                        JSONObject info = new JSONObject(response.body().string());
-                                        String c = "";
-                                        if(info.has("text")) {
-                                            c = info.getString("text");
-                                        } else if(info.has("url")) {
-                                            c = info.getString("url");
-                                        }
-                                        NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"));
-                                        items.add(itemobj);
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                        });
-
-                                    } catch (JSONException e) {
-                                        throw new RuntimeException(e);
-                                    }
-
-                                }
-                            });
-                        }
-
-
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            });
+            items.clear();
+            items.addAll(show_items);
+            adapter.notifyDataSetChanged();
             return true;
         }
         return false;
     }
+
+
 }

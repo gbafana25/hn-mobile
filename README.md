@@ -15,6 +15,5 @@ mobile app for reading hacker news
 - [x] item class 
 
 ## TODO
-- figure out how to get `client.enqueue call into function`
+- preview text from webpages/have button to open in browser
 - make space between entries smaller
-- get icons for navigation bar

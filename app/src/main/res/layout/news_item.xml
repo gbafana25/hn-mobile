@@ -8,7 +8,8 @@
     <LinearLayout
         android:id="@+id/item_layout"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
         android:orientation="vertical"
         app:barrierMargin="5dp"
         app:layout_constraintEnd_toEndOf="parent"
