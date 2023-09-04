@@ -29,6 +29,19 @@ public class hnapi {
 
     }
 
+    public Request getShowStores() {
+        String full_url = base_url+"showstories.json?print=pretty";
+
+        //OkHttpClient client = new OkHttpClient();
+        Request req = new Request.Builder()
+                .url(full_url)
+                .get()
+                .build();
+        return req;
+    }
+
+
+
     public Request getItem(int item) {
         String full_url = base_url+"item/"+item+".json?print=pretty";
          Request req = new Request.Builder()

@@ -5,6 +5,8 @@ public class NewsItem {
     private int score;
     private String content;
     private String author;
+    // use type to determine if the text or url fields are available
+
     private String type;
     private int time;
 
@@ -16,4 +18,10 @@ public class NewsItem {
         this.type = type;
         this.time = time;
     }
+
+    public String getTitle() {
+        return this.title;
+    }
+    public String getContent() { return this.content; }
+    public String getAuthor() { return this.author; }
 }
