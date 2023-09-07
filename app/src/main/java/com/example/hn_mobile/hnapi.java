@@ -57,7 +57,7 @@ public class hnapi {
                  .build();
          return req;
     }
-
+    /*
     public void runRequest(Request req, ArrayList<NewsItem> items) {
         OkHttpClient client = new OkHttpClient();
         hnapi api  = new hnapi();
@@ -86,12 +86,15 @@ public class hnapi {
                                 try {
                                     JSONObject info = new JSONObject(response.body().string());
                                     String c = "";
+                                    String ctype = "";
                                     if(info.has("text")) {
                                         c = info.getString("text");
+                                        ctype = "string";
                                     } else if(info.has("url")) {
                                         c = info.getString("url");
+                                        ctype = "url";
                                     }
-                                    NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"));
+                                    NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype);
                                     items.add(itemobj);
 
 
@@ -110,7 +113,10 @@ public class hnapi {
         });
 
     }
+
+     */
 }
+
 
 class reqCallback extends CompletableFuture<Response> implements Callback {
     public void onResponse(Call call, Response response) {

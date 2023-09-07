@@ -15,5 +15,4 @@ mobile app for reading hacker news
 - [x] item class 
 
 ## TODO
-- preview text from webpages/have button to open in browser
-- make space between entries smaller
+- add ask, jobs, polls

@@ -7,7 +7,7 @@
         android:layout_gravity="start"
         android:icon="@drawable/home"
         android:title="Home"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/show_btn"
         android:icon="@drawable/show"

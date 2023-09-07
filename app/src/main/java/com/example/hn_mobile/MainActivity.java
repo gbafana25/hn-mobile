@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private ArrayList<NewsItem> top_items = new ArrayList<>();
     private ArrayList<NewsItem> show_items = new ArrayList<>();
     private NewsItemAdapter adapter = new NewsItemAdapter(this, items);
+    RecyclerView item_list;
     private int num_items_show = 30;
     private int max_text_len = 300;
     hnapi api  = new hnapi();
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RecyclerView item_list = findViewById(R.id.news_item_recycler);
+        item_list = findViewById(R.id.news_item_recycler);
         BottomNavigationView nav = findViewById(R.id.bottom_nav);
         nav.setOnNavigationItemSelectedListener(this);
         nav.setSelectedItemId(R.id.home_btn);
@@ -78,8 +79,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Response item_resp = item_call.get();
                 JSONObject info = new JSONObject(item_resp.body().string());
                 String c = "";
+                String ctype = "";
+                String full = "";
                 if(info.has("text")) {
                     c = info.getString("text");
+                    full = info.getString("text");
+                    ctype = "string";
                     //System.out.println(c.length());
                     if(c.length() > max_text_len) {
                         c = info.getString("text").substring(0, max_text_len)+"...";
@@ -87,8 +92,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     }
                 } else if(info.has("url")) {
                     c = info.getString("url");
+                    full = info.getString("url");
+                    ctype = "url";
                 }
-                NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"));
+                NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full);
                 top_items.add(itemobj);
                 items.add(itemobj);
                 //System.out.println(top_items.size());
@@ -114,8 +121,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Response item_resp = item_call.get();
                 JSONObject info = new JSONObject(item_resp.body().string());
                 String c = "";
+                String ctype = "";
+                String full = "";
                 if(info.has("text")) {
                     c = info.getString("text");
+                    full = info.getString("text");
+                    ctype = "string";
                     //System.out.println(c.length());
                     if(c.length() > max_text_len) {
                         c = info.getString("text").substring(0, max_text_len)+"...";
@@ -123,8 +134,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     }
                 } else if(info.has("url")) {
                     c = info.getString("url");
+                    full = info.getString("url");
+                    ctype = "url";
                 }
-                NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"));
+                NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full);
                 show_items.add(itemobj);
 
 
@@ -153,6 +166,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             return true;
         }
         return false;
+    }
+
+    public void seeMore(View view) {
+        int pos = item_list.getChildAdapterPosition(view);
+        System.out.println(pos);
     }
 
 
