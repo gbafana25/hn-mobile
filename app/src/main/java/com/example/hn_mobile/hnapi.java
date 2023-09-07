@@ -22,6 +22,7 @@ import okhttp3.Response;
 public class hnapi {
     private String base_url = "https://hacker-news.firebaseio.com/v0/";
     private int num_items_show = 30;
+    private int max_text_len = 300;
 
 
     public Request getTopStories() {
@@ -36,7 +37,7 @@ public class hnapi {
 
     }
 
-    public Request getShowStores() {
+    public Request getShowStories() {
         String full_url = base_url+"showstories.json?print=pretty";
 
         //OkHttpClient client = new OkHttpClient();
@@ -47,6 +48,14 @@ public class hnapi {
         return req;
     }
 
+    public Request getAskStories() {
+        String full_url = base_url+"askstories.json?print=pretty";
+        Request req = new Request.Builder()
+                .url(full_url)
+                .get()
+                .build();
+        return req;
+    }
 
 
     public Request getItem(int item) {
@@ -57,64 +66,36 @@ public class hnapi {
                  .build();
          return req;
     }
-    /*
-    public void runRequest(Request req, ArrayList<NewsItem> items) {
-        OkHttpClient client = new OkHttpClient();
-        hnapi api  = new hnapi();
 
-        client.newCall(req).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
+    public NewsItem parseItem(JSONObject info) throws JSONException {
+        String c = "";
+        String ctype = "";
+        String full = "";
+        if(info.has("text")) {
+            c = info.getString("text");
+            full = info.getString("text");
+            ctype = "string";
+            //System.out.println(c.length());
+            if(c.length() > max_text_len) {
+                c = info.getString("text").substring(0, max_text_len)+"...";
+
             }
+        } else if(info.has("url")) {
+            c = info.getString("url");
+            full = info.getString("url");
+            ctype = "url";
+        }
+        NewsItem itemobj = null;
+        if(info.has("kids")) {
+            itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full, info.getJSONArray("kids"));
 
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                try {
-                    JSONArray obj = new JSONArray(response.body().string());
-                    OkHttpClient loop = new OkHttpClient();
-                    for(int i = 0; i < num_items_show; i++) {
-                        Request it = api.getItem(obj.getInt(i));
-                        loop.newCall(it).enqueue(new Callback() {
-                            @Override
-                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                e.printStackTrace();
-                            }
+        } else {
+            itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full, null);
 
-                            @Override
-                            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                                try {
-                                    JSONObject info = new JSONObject(response.body().string());
-                                    String c = "";
-                                    String ctype = "";
-                                    if(info.has("text")) {
-                                        c = info.getString("text");
-                                        ctype = "string";
-                                    } else if(info.has("url")) {
-                                        c = info.getString("url");
-                                        ctype = "url";
-                                    }
-                                    NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype);
-                                    items.add(itemobj);
-
-
-
-                                } catch (JSONException e) {
-                                    throw new RuntimeException(e);
-                                }
-
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-
+        }
+        return itemobj;
     }
 
-     */
 }
 
 

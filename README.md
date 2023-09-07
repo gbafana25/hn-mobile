@@ -4,10 +4,10 @@ mobile app for reading hacker news
 
 - **Note**: when testing in emulator, might need to cold boot first
 
-## Activities
+## Main sections
 
 - [x] Home page: top stories  
-- [ ] Ask stories
+- [x] Ask stories
 - [x] Show stories 
 
 ## Classes
@@ -15,4 +15,5 @@ mobile app for reading hacker news
 - [x] item class 
 
 ## TODO
-- add ask, jobs, polls
+- add ability to save items, access saved items
+- show comments

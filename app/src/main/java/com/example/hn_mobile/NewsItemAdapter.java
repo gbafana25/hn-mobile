@@ -78,6 +78,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
                         Intent readerIntent = new Intent(context, FullItemView.class);
                         readerIntent.putExtra("title", n.getTitle());
                         readerIntent.putExtra("body", n.getFullContent());
+                        n.loadComments();
                         context.startActivity(readerIntent);
                     }
                 }

@@ -9,7 +9,7 @@
         android:id="@+id/item_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
+        android:clipToPadding="true"
         android:orientation="vertical"
         app:barrierMargin="5dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,10 +42,12 @@
 
         <Button
             android:id="@+id/see_more_btn"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="#D53597FF"
             android:text="See more"
             android:textColorHighlight="#FFAA00"
-            android:textColorLink="#FFAA00" />
+            android:textColorLink="#FFAA00"
+            android:theme="@style/Theme.ShowBtn" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

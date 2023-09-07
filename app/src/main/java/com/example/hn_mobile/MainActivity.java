@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private ArrayList<NewsItem> items = new ArrayList<>();
     private ArrayList<NewsItem> top_items = new ArrayList<>();
     private ArrayList<NewsItem> show_items = new ArrayList<>();
+    private ArrayList<NewsItem> ask_items = new ArrayList<>();
     private NewsItemAdapter adapter = new NewsItemAdapter(this, items);
     RecyclerView item_list;
     private int num_items_show = 30;
@@ -58,12 +59,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         // load both sections when the app starts
 
         Request top = api.getTopStories();
-        Request show = api.getShowStores();
+        Request show = api.getShowStories();
+        Request ask = api.getAskStories();
+
 
         reqCallback top_call = new reqCallback();
         reqCallback show_call = new reqCallback();
+        reqCallback ask_call = new reqCallback();
         client.newCall(top).enqueue(top_call);
         client.newCall(show).enqueue(show_call);
+        client.newCall(ask).enqueue(ask_call);
 
         try {
             Response resp = top_call.get();
@@ -78,26 +83,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 loop.newCall(item).enqueue(item_call);
                 Response item_resp = item_call.get();
                 JSONObject info = new JSONObject(item_resp.body().string());
-                String c = "";
-                String ctype = "";
-                String full = "";
-                if(info.has("text")) {
-                    c = info.getString("text");
-                    full = info.getString("text");
-                    ctype = "string";
-                    //System.out.println(c.length());
-                    if(c.length() > max_text_len) {
-                        c = info.getString("text").substring(0, max_text_len)+"...";
-
-                    }
-                } else if(info.has("url")) {
-                    c = info.getString("url");
-                    full = info.getString("url");
-                    ctype = "url";
-                }
-                NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full);
+                NewsItem itemobj = api.parseItem(info);
                 top_items.add(itemobj);
+                // append to main items list/adapter since it is default
+                // doesn't seem to work if just appended to top_items
                 items.add(itemobj);
+
                 //System.out.println(top_items.size());
                 adapter.notifyDataSetChanged();
 
@@ -106,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         } catch (ExecutionException | InterruptedException | IOException | JSONException e) {
             throw new RuntimeException(e);
         }
+
+
 
         try {
             Response resp = show_call.get();
@@ -120,29 +113,33 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 loop.newCall(item).enqueue(item_call);
                 Response item_resp = item_call.get();
                 JSONObject info = new JSONObject(item_resp.body().string());
-                String c = "";
-                String ctype = "";
-                String full = "";
-                if(info.has("text")) {
-                    c = info.getString("text");
-                    full = info.getString("text");
-                    ctype = "string";
-                    //System.out.println(c.length());
-                    if(c.length() > max_text_len) {
-                        c = info.getString("text").substring(0, max_text_len)+"...";
+                NewsItem itemobj = api.parseItem(info);
 
-                    }
-                } else if(info.has("url")) {
-                    c = info.getString("url");
-                    full = info.getString("url");
-                    ctype = "url";
-                }
-                NewsItem itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full);
                 show_items.add(itemobj);
 
 
             }
         } catch (ExecutionException | InterruptedException | IOException | JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            Response resp = ask_call.get();
+            assert resp.body() != null;
+            OkHttpClient loop = new OkHttpClient();
+            JSONArray obj = new JSONArray(resp.body().string());
+            for(int i = 0; i < 30; i++) {
+                Request item = api.getItem(obj.getInt(i));
+                reqCallback item_call = new reqCallback();
+                loop.newCall(item).enqueue(item_call);
+                Response item_resp = item_call.get();
+                JSONObject info = new JSONObject(item_resp.body().string());
+                NewsItem itemobj = api.parseItem(info);
+                ask_items.add(itemobj);
+
+            }
+
+        } catch (JSONException | InterruptedException | ExecutionException | IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -164,13 +161,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             items.addAll(show_items);
             adapter.notifyDataSetChanged();
             return true;
+        } else if(selected == R.id.ask_btn) {
+            items.clear();
+            items.addAll(ask_items);
+            return true;
         }
         return false;
-    }
-
-    public void seeMore(View view) {
-        int pos = item_list.getChildAdapterPosition(view);
-        System.out.println(pos);
     }
 
 

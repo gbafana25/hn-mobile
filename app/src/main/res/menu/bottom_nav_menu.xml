@@ -13,4 +13,9 @@
         android:icon="@drawable/show"
         android:title="Show"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/ask_btn"
+        android:icon="@drawable/ask"
+        android:title="Ask"
+        app:showAsAction="ifRoom" />
 </menu>
