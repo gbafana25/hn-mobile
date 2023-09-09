@@ -88,7 +88,7 @@ public class hnapi {
         NewsItem itemobj = null;
         if(info.has("kids")) {
             itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full, info.getJSONArray("kids"));
-
+            //System.out.println(info.getJSONArray("kids"));
         } else {
             itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full, null);
 

@@ -8,12 +8,9 @@ mobile app for reading hacker news
 
 - [x] Home page: top stories  
 - [x] Ask stories
-- [x] Show stories 
-
-## Classes
-- [x] https client w/ functions for each endpoint
-- [x] item class 
+- [x] Show stories
 
 ## TODO
+- change fonts/make text more readable
 - add ability to save items, access saved items
-- show comments
+

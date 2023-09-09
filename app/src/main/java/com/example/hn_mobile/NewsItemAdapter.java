@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -74,11 +76,13 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
                     if(Objects.equals(n.getContentType(), "url")) {
                         Intent urlintent = new Intent(Intent.ACTION_VIEW, Uri.parse(n.getContent()));
                         context.startActivity(urlintent);
+
                     } else if(Objects.equals(n.getContentType(), "string")) {
                         Intent readerIntent = new Intent(context, FullItemView.class);
+                        n.loadComments();
                         readerIntent.putExtra("title", n.getTitle());
                         readerIntent.putExtra("body", n.getFullContent());
-                        n.loadComments();
+                        readerIntent.putExtra("comments", n.getCommentArray());
                         context.startActivity(readerIntent);
                     }
                 }

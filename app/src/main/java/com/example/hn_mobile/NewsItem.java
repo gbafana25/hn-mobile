@@ -23,8 +23,8 @@ public class NewsItem {
     private String type;
     private int time;
     private String content_type; // url or string
-    private JSONArray comment_ids;
-    private ArrayList<JSONObject> comments;
+    private ArrayList<Integer> comment_ids;
+    private ArrayList<String> comments;
 
     public NewsItem(String title, int score, String content, String author, String type, int time, String content_type, String content_full, JSONArray comment_ids) {
         this.title = title;
@@ -35,9 +35,16 @@ public class NewsItem {
         this.time = time;
         this.content_type = content_type;
         this.content_full = content_full;
+        this.comments = new ArrayList<String>();
         try {
             if(comment_ids != null) {
-                this.comment_ids = new JSONArray(comment_ids);
+                //this.comment_ids = new JSONArray(comment_ids);
+                this.comment_ids = new ArrayList<Integer>();
+                for(int j = 0; j < comment_ids.length(); j++) {
+                    this.comment_ids.add(comment_ids.getInt(j));
+                }
+                //System.out.println(this.comment_ids.get(0).toString());
+
             }
         } catch (JSONException e) {
             //throw new RuntimeException(e);
@@ -54,21 +61,23 @@ public class NewsItem {
     public String getType() { return this.type; }
     public String getContentType() { return this.content_type; }
     public String getFullContent() { return this.content_full; }
+    public ArrayList<String> getCommentArray() { return this.comments; }
     public void loadComments() {
         if(this.comment_ids != null) {
             hnapi api = new hnapi();
             OkHttpClient client = new OkHttpClient();
-            for(int i = 0; i < this.comment_ids.length(); i++) {
+            for(int i = 0; i < this.comment_ids.size(); i++) {
                 try {
-                    Request item = api.getItem(this.comment_ids.getInt(i));
+                    Request item = api.getItem(this.comment_ids.get(i));
                     reqCallback itemCall = new reqCallback();
                     client.newCall(item).enqueue(itemCall);
 
                     Response resp = itemCall.get();
                     assert resp.body() != null;
                     JSONObject com = new JSONObject(resp.body().string());
-                    System.out.println(resp.body().string());
-                    this.comments.add(com);
+                    //System.out.println(resp.body().string());
+                    String comstring = com.getString("by")+": "+com.getString("text");
+                    this.comments.add(comstring);
                 } catch (JSONException | ExecutionException | InterruptedException | IOException e) {
                     throw new RuntimeException(e);
                 }

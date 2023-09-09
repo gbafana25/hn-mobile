@@ -20,20 +20,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="8dp"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include2" />
 
     <ScrollView
+        android:id="@+id/story_scroll"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="493dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_text">
@@ -48,7 +48,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="0dp"
-                android:layout_marginRight="411dp"
                 android:scrollbars="vertical"
                 android:textSize="16sp"
                 android:verticalScrollbarPosition="defaultPosition"
@@ -57,5 +56,48 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
     </ScrollView>
+
+    <ScrollView
+        android:id="@+id/comments_scrollview"
+        android:layout_width="374dp"
+        android:layout_height="499dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_text"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/comment_box"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:verticalScrollbarPosition="defaultPosition" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/comments_btn"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="131dp"
+        android:layout_marginBottom="8dp"
+        android:onClick="showComments"
+        android:text="Comments"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/story_scroll" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
