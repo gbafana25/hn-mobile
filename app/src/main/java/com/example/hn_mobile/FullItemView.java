@@ -2,6 +2,7 @@ package com.example.hn_mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -26,6 +27,7 @@ public class FullItemView extends AppCompatActivity {
     private Button show_btn;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,14 +39,20 @@ public class FullItemView extends AppCompatActivity {
         //System.out.println(comment_array.size());
         for(int i = 0; i < comment_array.size(); i++) {
             //comment_section = String.valueOf(comment_array.get(i) + "\n");
-            comment_section += comment_array.get(i)+"\n";
+            comment_section += comment_array.get(i)+"\n\n";
         }
+
         TextView btext = findViewById(R.id.body_text);
         TextView ttext = findViewById(R.id.title_text);
         TextView comtext = findViewById(R.id.comment_box);
         comscroll = findViewById(R.id.comments_scrollview);
         storyscroll = findViewById(R.id.story_scroll);
         show_btn = findViewById(R.id.comments_btn);
+        if(comment_array.size() == 0) {
+            //show_btn.setClickable(false);
+            show_btn.setEnabled(false);
+            show_btn.setText("No comments");
+        }
         btext.setText(body);
         ttext.setText(title);
         comtext.setText(comment_section);

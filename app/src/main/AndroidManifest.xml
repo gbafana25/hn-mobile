@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Hnmobile"
         tools:targetApi="31">
         <activity
+            android:name=".SavedView"
+            android:exported="false" />
+        <activity
             android:name=".FullItemView"
             android:exported="false" />
         <activity

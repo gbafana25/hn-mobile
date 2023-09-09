@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,11 +13,13 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Array;
 import java.util.ArrayList;
@@ -164,6 +167,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         } else if(selected == R.id.ask_btn) {
             items.clear();
             items.addAll(ask_items);
+            return true;
+        } else if(selected == R.id.saved_btn) {
+            String storage_name = "storage.json";
+
+            for(int j = 0; j < adapter.storage_array.size(); j++) {
+                JSONObject item_serialized = adapter.storage_array.get(j).toJSON();
+                try (FileOutputStream f = this.openFileOutput(storage_name, MODE_APPEND)) {
+                    f.write(item_serialized.toString().getBytes());
+                    f.write("\n".getBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            Intent i = new Intent(this, SavedView.class);
+            startActivity(i);
             return true;
         }
         return false;

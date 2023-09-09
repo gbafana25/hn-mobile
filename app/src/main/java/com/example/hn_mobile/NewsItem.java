@@ -85,4 +85,21 @@ public class NewsItem {
         }
 
     }
+
+    public JSONObject toJSON() {
+        JSONObject serialized = new JSONObject();
+        try {
+            JSONArray comarray = new JSONArray(this.comment_ids);
+            serialized.put("title", this.title);
+            serialized.put("author", this.author);
+            serialized.put("content", this.content);
+            serialized.put("content_full", this.content_full);
+            serialized.put("type", this.type);
+            serialized.put("content_type", this.content_type);
+            serialized.put("comment_ids", comarray);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return serialized;
+    }
 }
