@@ -53,6 +53,7 @@ public class FullItemView extends AppCompatActivity {
             show_btn.setEnabled(false);
             show_btn.setText("No comments");
         }
+
         btext.setText(body);
         ttext.setText(title);
         comtext.setText(comment_section);

@@ -35,5 +35,24 @@
             android:id="@+id/content_short"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/see_btn"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:backgroundTint="#D53597FF"
+                android:text="See more"
+                android:textColorHighlight="#FFAA00"
+                android:textColorLink="#FFAA00"
+                android:theme="@style/Theme.ShowBtn" />
+
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

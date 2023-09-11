@@ -11,7 +11,7 @@ mobile app for reading hacker news
 - [x] Show stories
 
 ## TODO
-- finish saved items section
-- change fonts/make text more readable (spacing, size, etc.)
 - add button to clear saved stories
+- separate buttons to read comments/read story or open in browser
+- change fonts/make text more readable (spacing, size, convert html-encoded characters, etc.)
 

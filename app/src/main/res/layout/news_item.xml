@@ -3,15 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
 
     <LinearLayout
         android:id="@+id/item_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:clipToPadding="true"
+        android:dividerPadding="20dp"
         android:orientation="vertical"
-        app:barrierMargin="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +24,7 @@
         <TextView
             android:id="@+id/newsitem_title"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +45,7 @@
             android:textSize="16sp" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:orientation="horizontal"
@@ -52,6 +56,7 @@
                 android:id="@+id/see_more_btn"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:backgroundTint="#D53597FF"
                 android:text="See more"
                 android:textColorHighlight="#FFAA00"
@@ -60,7 +65,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/read_later_chip"
-                android:layout_width="40dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checkable="true"

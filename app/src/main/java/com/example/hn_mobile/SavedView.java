@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,9 +40,17 @@ public class SavedView extends AppCompatActivity {
                 String l = reader.readLine();
                 while(l != null) {
                     //output_str.append(l).append("\n");
-                    System.out.println(l);
+                    //System.out.println(l);
                     JSONObject info = new JSONObject(l);
-                    items.add(new NewsItem(info.getString("title"), 0, info.getString("content"), info.getString("author"), info.getString("type"), 0, info.getString("content_type"), info.getString("content_full"), null));
+                    if(info.has("comment_ids") && !info.getString("comment_ids").equals("[]")) {
+                        String str_array = info.getString("comment_ids").substring(1, info.getString("comment_ids").length()-1);
+                        System.out.println(str_array);
+                        JSONArray comment_array = new JSONArray(str_array.split(","));
+                        items.add(new NewsItem(info.getString("title"), 0, info.getString("content"), info.getString("author"), info.getString("type"), 0, info.getString("content_type"), info.getString("content_full"), comment_array));
+
+                    } else {
+                        items.add(new NewsItem(info.getString("title"), 0, info.getString("content"), info.getString("author"), info.getString("type"), 0, info.getString("content_type"), info.getString("content_full"), null));
+                    }
 
 
                     //System.out.println(item.getString("title"));

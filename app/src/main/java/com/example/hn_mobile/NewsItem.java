@@ -62,6 +62,7 @@ public class NewsItem {
     public String getContentType() { return this.content_type; }
     public String getFullContent() { return this.content_full; }
     public ArrayList<String> getCommentArray() { return this.comments; }
+    public int getCommentArraySize() { return this.comments.size(); }
     public void loadComments() {
         if(this.comment_ids != null) {
             hnapi api = new hnapi();
