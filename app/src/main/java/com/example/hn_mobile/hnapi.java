@@ -1,5 +1,6 @@
 package com.example.hn_mobile;
 
+import android.text.Html;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -74,10 +75,13 @@ public class hnapi {
         if(info.has("text")) {
             c = info.getString("text");
             full = info.getString("text");
+            full = Html.fromHtml(full).toString();
             ctype = "string";
             //System.out.println(c.length());
             if(c.length() > max_text_len) {
-                c = info.getString("text").substring(0, max_text_len)+"...";
+                c = info.getString("text").substring(0, max_text_len);
+                c = Html.fromHtml(c).toString();
+                c += "...";
 
             }
         } else if(info.has("url")) {
