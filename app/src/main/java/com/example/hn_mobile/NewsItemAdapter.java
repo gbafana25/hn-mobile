@@ -64,6 +64,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
         private TextView item_content;
         private TextView item_author;
         private Button see_more;
+        private Button comment_btn;
         private Chip read_later;
         public NewsItemHolder(View view) {
             super(view);
@@ -72,6 +73,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
             item_author = view.findViewById(R.id.newsitem_author);
             see_more = view.findViewById(R.id.see_more_btn);
             read_later = view.findViewById(R.id.read_later_chip);
+            comment_btn = view.findViewById(R.id.comment_btn);
 
         }
 
@@ -116,6 +118,19 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
                         }
                     }
 
+                }
+            });
+
+            comment_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int id_size = n.getCommentIds().size();
+                    if(id_size != 0) {
+                        Intent commentIntent = new Intent(context, CommentView.class);
+                        n.loadComments();
+                        commentIntent.putExtra("comments", n.getCommentArray());
+                        context.startActivity(commentIntent);
+                    }
                 }
             });
 

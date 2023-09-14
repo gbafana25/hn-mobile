@@ -50,19 +50,29 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:orientation="horizontal"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp">
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
 
             <Button
                 android:id="@+id/see_more_btn"
-                android:layout_width="170dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:backgroundTint="#D53597FF"
-                android:text="See more"
+                android:text="Read more"
                 android:textColorHighlight="#FFAA00"
                 android:textColorLink="#FFAA00"
                 android:theme="@style/Theme.ShowBtn" />
+
+
+            <Button
+                android:id="@+id/comment_btn"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="Comments" />
+
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/read_later_chip"
@@ -70,10 +80,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checkable="true"
-                android:text="Read Later"
+                android:text="Save"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                tools:text="Read Later" />
+                tools:text="Save" />
         </LinearLayout>
 
     </LinearLayout>

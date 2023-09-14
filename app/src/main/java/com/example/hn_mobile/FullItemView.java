@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +40,8 @@ public class FullItemView extends AppCompatActivity {
         //System.out.println(comment_array.size());
         for(int i = 0; i < comment_array.size(); i++) {
             //comment_section = String.valueOf(comment_array.get(i) + "\n");
-            comment_section += comment_array.get(i)+"\n\n";
+            String comment_formatted = Html.fromHtml(comment_array.get(i)).toString();
+            comment_section += comment_formatted+"\n\n";
         }
 
         TextView btext = findViewById(R.id.body_text);

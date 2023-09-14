@@ -62,6 +62,7 @@ public class NewsItem {
     public String getContentType() { return this.content_type; }
     public String getFullContent() { return this.content_full; }
     public ArrayList<String> getCommentArray() { return this.comments; }
+    public ArrayList<Integer> getCommentIds() { return this.comment_ids; }
     public int getCommentArraySize() { return this.comments.size(); }
     public void loadComments() {
         if(this.comment_ids != null) {
@@ -77,8 +78,12 @@ public class NewsItem {
                     assert resp.body() != null;
                     JSONObject com = new JSONObject(resp.body().string());
                     //System.out.println(resp.body().string());
-                    String comstring = com.getString("by")+": "+com.getString("text");
-                    this.comments.add(comstring);
+                    String comstring = "";
+                    if(com.has("by") && com.has("text")) {
+                        comstring = com.getString("by")+": "+com.getString("text");
+                        this.comments.add(comstring);
+                    }
+
                 } catch (JSONException | ExecutionException | InterruptedException | IOException e) {
                     throw new RuntimeException(e);
                 }

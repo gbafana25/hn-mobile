@@ -11,6 +11,5 @@ mobile app for reading hacker news
 - [x] Show stories
 
 ## TODO
-- add button to clear saved stories
-- separate buttons to read comments, read story/open in browser
+
 
