@@ -83,6 +83,7 @@ public class SavedViewAdapter extends RecyclerView.Adapter<SavedViewAdapter.Save
             author.setText("by "+n.getAuthor());
             content_short.setText(n.getContent());
 
+
             see_more.setOnClickListener(view -> {
                 if(Objects.equals(n.getContentType(), "url")) {
                     Intent urlintent = new Intent(Intent.ACTION_VIEW, Uri.parse(n.getContent()));
@@ -111,6 +112,7 @@ public class SavedViewAdapter extends RecyclerView.Adapter<SavedViewAdapter.Save
 
             delete.setOnClickListener(view -> {
                 // delete from arraylist
+                n.setSaved(false);
                 items.remove(n);
 
                 // delete from savefile
@@ -123,7 +125,7 @@ public class SavedViewAdapter extends RecyclerView.Adapter<SavedViewAdapter.Save
                         while(l != null) {
                             JSONObject json = new JSONObject(l);
                             // should be != ?
-                            if(json.getString("title").equals(n.getTitle())) {
+                            if(!json.getString("title").equals(n.getTitle())) {
                                 cobjs.add(l);
                             }
 
@@ -137,10 +139,10 @@ public class SavedViewAdapter extends RecyclerView.Adapter<SavedViewAdapter.Save
                     // write arraylist back to file
                     try(FileOutputStream out = context.openFileOutput("storage.json", Context.MODE_PRIVATE)) {
                         for(int i = 0; i < cobjs.size(); i++) {
-                            out.write(cobjs.get(i).getBytes());
+                            out.write((cobjs.get(i)+"\n").getBytes());
                         }
                     }
-                    Intent ret = new Intent(context, MainActivity.class);
+                    Intent ret = new Intent(context, SavedView.class);
                     context.startActivity(ret);
                 } catch (IOException e) {
                     throw new RuntimeException(e);

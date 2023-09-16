@@ -82,6 +82,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
             item_title.setText(n.getTitle());
             item_content.setText(n.getContent());
             item_author.setText("by " +n.getAuthor());
+            //read_later.setChecked(n.getSaved());
 
             see_more.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,8 +108,9 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
                     // create storage file w/ json array: saved_items: []
 
                     //System.out.println(n.getTitle()+" has been toggled");
-                    if(read_later.isChecked()) {
+                    if(read_later.isChecked() && !storage_array.contains(n)) {
                         storage_array.add(n);
+
                     } else {
                         for(int i = 0; i < storage_array.size(); i++) {
                             if(Objects.equals(n.getTitle(), storage_array.get(i).getTitle())) {

@@ -59,6 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:backgroundTint="#D53597FF"
+                android:focusable="auto"
+                android:focusableInTouchMode="false"
                 android:text="Read more"
                 android:textColorHighlight="#FFAA00"
                 android:textColorLink="#FFAA00"

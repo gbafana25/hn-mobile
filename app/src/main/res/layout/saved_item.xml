@@ -63,11 +63,16 @@
                 android:id="@+id/comment_btn_saved"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:backgroundTint="#673AB7"
+                android:adjustViewBounds="false"
+                android:background="@drawable/rounded_imagebtn"
+                android:backgroundTint="#25CC12"
                 android:contentDescription="comments_btn"
+                android:cropToPadding="false"
                 android:foregroundTint="#FFFFFF"
-                android:scaleType="fitCenter"
+                android:padding="5dp"
+                android:scaleType="centerInside"
                 app:srcCompat="@drawable/comments" />
 
             <ImageButton
@@ -75,8 +80,10 @@
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/rounded_imagebtn"
                 android:backgroundTint="#FF0000"
                 android:contentDescription="delete_btn"
+                android:scaleType="centerInside"
                 app:srcCompat="@drawable/delete" />
 
         </LinearLayout>

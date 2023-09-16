@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         } else if(selected == R.id.ask_btn) {
             items.clear();
             items.addAll(ask_items);
+            adapter.notifyDataSetChanged();
             return true;
         } else if(selected == R.id.saved_btn) {
             String storage_name = "storage.json";

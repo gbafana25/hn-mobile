@@ -25,6 +25,7 @@ public class NewsItem {
     private String content_type; // url or string
     private ArrayList<Integer> comment_ids;
     private ArrayList<String> comments;
+    private boolean is_saved;
 
     public NewsItem(String title, int score, String content, String author, String type, int time, String content_type, String content_full, JSONArray comment_ids) {
         this.title = title;
@@ -35,6 +36,7 @@ public class NewsItem {
         this.time = time;
         this.content_type = content_type;
         this.content_full = content_full;
+        this.is_saved = false;
         this.comments = new ArrayList<String>();
         try {
             if(comment_ids != null) {
@@ -64,6 +66,12 @@ public class NewsItem {
     public ArrayList<String> getCommentArray() { return this.comments; }
     public ArrayList<Integer> getCommentIds() { return this.comment_ids; }
     public int getCommentArraySize() { return this.comments.size(); }
+    public void setSaved(boolean b) {
+        is_saved = b;
+    }
+    public boolean getSaved() {
+        return is_saved;
+    }
     public void loadComments() {
         if(this.comment_ids != null) {
             hnapi api = new hnapi();
