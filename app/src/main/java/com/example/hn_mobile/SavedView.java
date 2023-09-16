@@ -49,7 +49,7 @@ public class SavedView extends AppCompatActivity {
                     JSONObject info = new JSONObject(l);
                     if(info.has("comment_ids") && !info.getString("comment_ids").equals("[]")) {
                         String str_array = info.getString("comment_ids").substring(1, info.getString("comment_ids").length()-1);
-                        System.out.println(str_array);
+                        //System.out.println(str_array);
                         JSONArray comment_array = new JSONArray(str_array.split(","));
                         items.add(new NewsItem(info.getString("title"), 0, info.getString("content"), info.getString("author"), info.getString("type"), 0, info.getString("content_type"), info.getString("content_full"), comment_array));
 

@@ -11,5 +11,4 @@ mobile app for reading hacker news
 - [x] Show stories
 
 ## TODO
-
-
+- individual remove buttons in saved view
