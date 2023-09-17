@@ -1,5 +1,7 @@
 package com.example.hn_mobile;
 
+import android.text.Html;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,12 +32,12 @@ public class NewsItem {
     public NewsItem(String title, int score, String content, String author, String type, int time, String content_type, String content_full, JSONArray comment_ids) {
         this.title = title;
         this.score = score;
-        this.content = content;
+        this.content = String.valueOf(Html.fromHtml(content));
         this.author = author;
         this.type = type;
         this.time = time;
         this.content_type = content_type;
-        this.content_full = content_full;
+        this.content_full = String.valueOf(Html.fromHtml(content_full));
         this.is_saved = false;
         this.comments = new ArrayList<String>();
         try {

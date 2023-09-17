@@ -18,11 +18,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -82,7 +86,21 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
             item_title.setText(n.getTitle());
             item_content.setText(n.getContent());
             item_author.setText("by " +n.getAuthor());
+            // read save file, if exists then set to saved
             //read_later.setChecked(n.getSaved());
+            if(itemIsSaved(n, context)) {
+                read_later.setEnabled(false);
+                n.setSaved(true);
+
+            } else {
+                read_later.setEnabled(true);
+            }
+            /*
+            if(n.getSaved()) {
+                read_later.setChecked(true);
+            }
+
+             */
 
             see_more.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -109,11 +127,16 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
 
                     //System.out.println(n.getTitle()+" has been toggled");
                     if(read_later.isChecked() && !storage_array.contains(n)) {
-                        storage_array.add(n);
+                        // check if already in save file
+                        if(!itemIsSaved(n, context)) {
+                            storage_array.add(n);
+                        }
+
 
                     } else {
                         for(int i = 0; i < storage_array.size(); i++) {
                             if(Objects.equals(n.getTitle(), storage_array.get(i).getTitle())) {
+                                n.setSaved(false);
                                 storage_array.remove(i);
                                 break;
                             }
@@ -137,6 +160,38 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
             });
 
 
+        }
+
+        public boolean itemIsSaved(NewsItem it, Context context) {
+            try {
+                FileInputStream f = context.openFileInput("storage.json");
+                InputStreamReader reader = new InputStreamReader(f);
+                try(BufferedReader buf = new BufferedReader(reader)) {
+                    boolean exists = false;
+                    String l = buf.readLine();
+                    while(l != null) {
+                        JSONObject lineobj = new JSONObject(l);
+                        if(lineobj.toString().equals(it.toJSON().toString())) {
+                            exists = true;
+                            break;
+                        }
+                        l = buf.readLine();
+                    }
+                    if(!exists) {
+                        it.setSaved(true);
+                        //storage_array.add(n);
+                        return false;
+                    } else {
+                        //read_later.setEnabled(false);
+                        //it.setSaved(false);
+                        return true;
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

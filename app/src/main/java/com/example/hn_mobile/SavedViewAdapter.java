@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +83,7 @@ public class SavedViewAdapter extends RecyclerView.Adapter<SavedViewAdapter.Save
             title.setText(n.getTitle());
             author.setText("by "+n.getAuthor());
             content_short.setText(n.getContent());
+            n.setSaved(true);
 
 
             see_more.setOnClickListener(view -> {
@@ -142,11 +144,13 @@ public class SavedViewAdapter extends RecyclerView.Adapter<SavedViewAdapter.Save
                             out.write((cobjs.get(i)+"\n").getBytes());
                         }
                     }
-                    Intent ret = new Intent(context, SavedView.class);
-                    context.startActivity(ret);
+                    //Intent ret = new Intent(context, SavedView.class);
+                    //context.startActivity(ret);
+                    SavedViewAdapter.this.notifyDataSetChanged();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+
             });
         }
     }
