@@ -26,7 +26,7 @@ public class NewsItem {
     private int time;
     private String content_type; // url or string
     private ArrayList<Integer> comment_ids;
-    private ArrayList<String> comments;
+    private ArrayList<CommentItem> comments;
     private boolean is_saved;
 
     public NewsItem(String title, int score, String content, String author, String type, int time, String content_type, String content_full, JSONArray comment_ids) {
@@ -39,7 +39,7 @@ public class NewsItem {
         this.content_type = content_type;
         this.content_full = String.valueOf(Html.fromHtml(content_full));
         this.is_saved = false;
-        this.comments = new ArrayList<String>();
+        this.comments = new ArrayList<CommentItem>();
         try {
             if(comment_ids != null) {
                 //this.comment_ids = new JSONArray(comment_ids);
@@ -65,7 +65,7 @@ public class NewsItem {
     public String getType() { return this.type; }
     public String getContentType() { return this.content_type; }
     public String getFullContent() { return this.content_full; }
-    public ArrayList<String> getCommentArray() { return this.comments; }
+    public ArrayList<CommentItem> getCommentArray() { return this.comments; }
     public ArrayList<Integer> getCommentIds() { return this.comment_ids; }
     public int getCommentArraySize() { return this.comments.size(); }
     public void setSaved(boolean b) {
@@ -90,8 +90,9 @@ public class NewsItem {
                     //System.out.println(resp.body().string());
                     String comstring = "";
                     if(com.has("by") && com.has("text")) {
-                        comstring = com.getString("by")+": "+com.getString("text");
-                        this.comments.add(comstring);
+                        //comstring = com.getString("by")+": "+com.getString("text");
+                        CommentItem new_comment = new CommentItem(com.getString("by"), com.getString("text"));
+                        this.comments.add(new_comment);
                     }
 
                 } catch (JSONException | ExecutionException | InterruptedException | IOException e) {

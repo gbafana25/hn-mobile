@@ -114,7 +114,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
                         n.loadComments();
                         readerIntent.putExtra("title", n.getTitle());
                         readerIntent.putExtra("body", n.getFullContent());
-                        readerIntent.putExtra("comments", n.getCommentArray());
+                        readerIntent.putParcelableArrayListExtra("comments", n.getCommentArray());
                         context.startActivity(readerIntent);
                     }
                 }
@@ -153,7 +153,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
                     if(id_size != 0) {
                         Intent commentIntent = new Intent(context, CommentView.class);
                         n.loadComments();
-                        commentIntent.putExtra("comments", n.getCommentArray());
+                        commentIntent.putParcelableArrayListExtra("comments", n.getCommentArray());
                         context.startActivity(commentIntent);
                     }
                 }

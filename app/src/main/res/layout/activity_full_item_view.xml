@@ -31,11 +31,11 @@
     <ScrollView
         android:id="@+id/story_scroll"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="400dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="33dp"
+        android:layout_marginBottom="50dp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/comments_btn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +50,7 @@
             <TextView
                 android:id="@+id/body_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="0dp"
                 android:scrollbars="vertical"
                 android:textSize="16sp"
@@ -62,34 +62,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <ScrollView
-        android:id="@+id/comments_scrollview"
-        android:layout_width="374dp"
-        android:layout_height="499dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_text"
-        app:layout_constraintVertical_bias="0.0">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/comment_box"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical"
-                android:textStyle="bold"
-                android:verticalScrollbarPosition="defaultPosition" />
-        </LinearLayout>
-    </ScrollView>
 
     <Button
         android:id="@+id/comments_btn"
@@ -105,5 +77,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/story_scroll" />
+
+
+    <!--
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/comments_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/story_scroll"
+        app:layout_wrapBehaviorInParent="included" />
+        -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

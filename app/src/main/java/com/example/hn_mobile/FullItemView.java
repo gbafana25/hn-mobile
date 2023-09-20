@@ -1,6 +1,12 @@
 package com.example.hn_mobile;
 
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -21,14 +27,14 @@ import java.util.Collection;
 public class FullItemView extends AppCompatActivity {
     private String body;
     private String title;
-    private ArrayList<String> comment_array = new ArrayList<>();
-    private String comment_section;
-    private ScrollView comscroll;
+    private ArrayList<CommentItem> comment_array = new ArrayList<>();
     private ScrollView storyscroll;
     private Button show_btn;
+    private CommentItemAdapter comment_adapter;
+    private RecyclerView comment_view;
 
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,36 +42,58 @@ public class FullItemView extends AppCompatActivity {
         Intent in = getIntent();
         body = in.getStringExtra("body");
         title = in.getStringExtra("title");
-        comment_array.addAll(in.getStringArrayListExtra("comments"));
+        comment_array = in.getParcelableArrayListExtra("comments");
         //System.out.println(comment_array.size());
+
+
         for(int i = 0; i < comment_array.size(); i++) {
             //comment_section = String.valueOf(comment_array.get(i) + "\n");
-            String comment_formatted = Html.fromHtml(comment_array.get(i)).toString();
-            comment_section += comment_formatted+"\n\n";
+            //String comment_formatted = Html.fromHtml(comment_array.get(i)).toString();
+            //comment_section += comment_formatted+"\n\n";
+            System.out.println(comment_array.get(i).getContent());
         }
+
+        /*
+        comment_view = findViewById(R.id.comments_view);
+        comment_view.setLayoutManager(new LinearLayoutManager(this));
+        comment_adapter = new CommentItemAdapter(this, comment_array);
+        comment_view.setAdapter(comment_adapter);
+
+         */
+
 
         TextView btext = findViewById(R.id.body_text);
         TextView ttext = findViewById(R.id.title_text);
-        TextView comtext = findViewById(R.id.comment_box);
-        comscroll = findViewById(R.id.comments_scrollview);
+        //TextView comtext = findViewById(R.id.comment_box);
+        //comscroll = findViewById(R.id.comments_scrollview);
         storyscroll = findViewById(R.id.story_scroll);
         show_btn = findViewById(R.id.comments_btn);
+        /*
         if(comment_array.size() == 0) {
             //show_btn.setClickable(false);
             show_btn.setEnabled(false);
             show_btn.setText("No comments");
         }
 
+         */
+
         btext.setText(body);
         ttext.setText(title);
-        comtext.setText(comment_section);
+        //comtext.setText(comment_section);
         ttext.setMovementMethod(new ScrollingMovementMethod());
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void showComments(View view) {
-        comscroll.setVisibility(View.VISIBLE);
-        storyscroll.setVisibility(View.GONE);
-        show_btn.setVisibility(View.GONE);
+        //comment_adapter.notifyDataSetChanged();
+        /*
+        comment_view.setVisibility(view.VISIBLE);
+        storyscroll.setVisibility(view.GONE);
+        show_btn.setVisibility(view.GONE);
+         */
+        Intent c = new Intent(this, CommentView.class);
+        c.putParcelableArrayListExtra("comments", comment_array);
+        startActivity(c);
     }
 
 }
