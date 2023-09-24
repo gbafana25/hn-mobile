@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         try {
             Response resp = top_call.get();
             assert resp.body() != null;
+            if(!resp.isSuccessful()) {
+                Intent saves = new Intent(this, SavedView.class);
+                startActivity(saves);
+            }
             OkHttpClient loop = new OkHttpClient();
 
             JSONArray obj = new JSONArray(resp.body().string());
@@ -98,13 +105,22 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
             }
-        } catch (ExecutionException | InterruptedException | IOException | JSONException e) {
+        } catch (ExecutionException ee) {
+            Intent saves = new Intent(this, SavedView.class);
+            saves.putExtra("status", "offline");
+            startActivity(saves);
+        }
+        catch (InterruptedException | IOException | JSONException e) {
             throw new RuntimeException(e);
         }
 
 
         try {
             Response resp = show_call.get();
+            if(!resp.isSuccessful()) {
+                Intent saves = new Intent(this, SavedView.class);
+                startActivity(saves);
+            }
             assert resp.body() != null;
             OkHttpClient loop = new OkHttpClient();
 
@@ -122,12 +138,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
             }
-        } catch (ExecutionException | InterruptedException | IOException | JSONException e) {
+        } catch (ExecutionException ee) {
+            Intent saves = new Intent(this, SavedView.class);
+            saves.putExtra("status", "offline");
+            startActivity(saves);
+        }
+        catch (InterruptedException | IOException | JSONException e) {
             throw new RuntimeException(e);
         }
 
         try {
             Response resp = ask_call.get();
+            if(!resp.isSuccessful()) {
+                Intent saves = new Intent(this, SavedView.class);
+                startActivity(saves);
+            }
             assert resp.body() != null;
             OkHttpClient loop = new OkHttpClient();
             JSONArray obj = new JSONArray(resp.body().string());
@@ -142,7 +167,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
             }
 
-        } catch (JSONException | InterruptedException | ExecutionException | IOException e) {
+        } catch (ExecutionException ee) {
+            Intent saves = new Intent(this, SavedView.class);
+            saves.putExtra("status", "offline");
+            startActivity(saves);
+        }
+        catch (JSONException | InterruptedException | IOException e) {
             throw new RuntimeException(e);
         }
 

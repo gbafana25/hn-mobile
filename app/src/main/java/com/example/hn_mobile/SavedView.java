@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,11 +24,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class SavedView extends AppCompatActivity {
     private ArrayList<NewsItem> items = new ArrayList<>();
     private SavedViewAdapter adapter = new SavedViewAdapter(this, items);
     private RecyclerView saved_items;
+    private Button home;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -37,6 +40,19 @@ public class SavedView extends AppCompatActivity {
         saved_items = findViewById(R.id.saved_items);
         saved_items.setLayoutManager(new LinearLayoutManager(this));
         saved_items.setAdapter(adapter);
+
+        home = findViewById(R.id.saved_home);
+
+        try {
+            Intent save = getIntent();
+            String status = save.getStringExtra("status");
+            if(Objects.equals(status, "offline")) {
+                home.setEnabled(false);
+                home.setClickable(false);
+            }
+        } catch (Exception e) {
+            System.out.println("oneline");
+        }
         //StringBuilder output_str = new StringBuilder();
         try {
             FileInputStream f = this.openFileInput("storage.json");
@@ -84,6 +100,7 @@ public class SavedView extends AppCompatActivity {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
+            f.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

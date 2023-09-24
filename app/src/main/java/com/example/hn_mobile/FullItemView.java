@@ -45,19 +45,11 @@ public class FullItemView extends AppCompatActivity {
         comment_array = in.getParcelableArrayListExtra("comments");
         //System.out.println(comment_array.size());
 
-
-        for(int i = 0; i < comment_array.size(); i++) {
-            //comment_section = String.valueOf(comment_array.get(i) + "\n");
-            //String comment_formatted = Html.fromHtml(comment_array.get(i)).toString();
-            //comment_section += comment_formatted+"\n\n";
-            System.out.println(comment_array.get(i).getContent());
-        }
-
         /*
-        comment_view = findViewById(R.id.comments_view);
-        comment_view.setLayoutManager(new LinearLayoutManager(this));
-        comment_adapter = new CommentItemAdapter(this, comment_array);
-        comment_view.setAdapter(comment_adapter);
+        for(int i = 0; i < comment_array.size(); i++) {
+            System.out.println(comment_array.get(i).getContent());
+
+        }
 
          */
 
@@ -68,6 +60,11 @@ public class FullItemView extends AppCompatActivity {
         //comscroll = findViewById(R.id.comments_scrollview);
         storyscroll = findViewById(R.id.story_scroll);
         show_btn = findViewById(R.id.comments_btn);
+
+        if(comment_array.size() == 0) {
+            show_btn.setEnabled(false);
+        }
+
         /*
         if(comment_array.size() == 0) {
             //show_btn.setClickable(false);

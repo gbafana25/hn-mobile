@@ -83,6 +83,15 @@ public class SavedViewAdapter extends RecyclerView.Adapter<SavedViewAdapter.Save
             title.setText(n.getTitle());
             author.setText("by "+n.getAuthor());
             content_short.setText(n.getContent());
+            if(n.getCommentIds() == null) {
+                /*
+                comments.setEnabled(false);
+                comments.setClickable(false);
+                comments.setActivated(false);
+                */
+                comments.setVisibility(View.GONE);
+            }
+
             n.setSaved(true);
 
 

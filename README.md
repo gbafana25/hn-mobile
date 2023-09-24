@@ -11,5 +11,4 @@ mobile app for reading hacker news
 - [x] Show stories
 
 ## TODO
-- allow saved stories to be retrieved w/o retrieving from API
-    - be able to open saved view separate from MainActivity, or have network timeout
+- add more info about posts/comments (upvotes, time, etc.)

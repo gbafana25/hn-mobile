@@ -95,12 +95,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
             } else {
                 read_later.setEnabled(true);
             }
-            /*
-            if(n.getSaved()) {
-                read_later.setChecked(true);
-            }
 
-             */
 
             see_more.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -179,17 +174,23 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
                     }
                     if(!exists) {
                         it.setSaved(true);
+                        f.close();
                         //storage_array.add(n);
                         return false;
                     } else {
                         //read_later.setEnabled(false);
                         //it.setSaved(false);
+                        f.close();
                         return true;
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-            } catch (IOException e) {
+
+            } catch (FileNotFoundException fe) {
+                return false;
+            }
+            catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }

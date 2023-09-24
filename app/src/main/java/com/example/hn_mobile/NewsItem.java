@@ -1,5 +1,6 @@
 package com.example.hn_mobile;
 
+import android.content.Context;
 import android.text.Html;
 
 import org.json.JSONArray;
