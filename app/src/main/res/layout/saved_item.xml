@@ -36,6 +36,18 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/saved_date_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/saved_score_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/content_short"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

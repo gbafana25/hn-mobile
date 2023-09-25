@@ -69,7 +69,7 @@ public class SavedView extends AppCompatActivity {
                         //System.out.println(str_array);
                         JSONArray comment_array = new JSONArray(str_array.split(","));
 
-                        NewsItem newitem = new NewsItem(info.getString("title"), 0, info.getString("content"), info.getString("author"), info.getString("type"), 0, info.getString("content_type"), info.getString("content_full"), comment_array);
+                        NewsItem newitem = new NewsItem(info.getString("title"), 0, info.getString("content"), info.getString("author"), info.getString("type"), 0, info.getString("content_type"), info.getString("content_full"), comment_array, info.getInt("score"), info.getInt("date_posted"));
 
                         if(!items.contains(newitem)) {
                             items.add(newitem);
@@ -79,7 +79,7 @@ public class SavedView extends AppCompatActivity {
                         //items.add(newitem);
 
                     } else {
-                        NewsItem newitem = new NewsItem(info.getString("title"), 0, info.getString("content"), info.getString("author"), info.getString("type"), 0, info.getString("content_type"), info.getString("content_full"), null);
+                        NewsItem newitem = new NewsItem(info.getString("title"), 0, info.getString("content"), info.getString("author"), info.getString("type"), 0, info.getString("content_type"), info.getString("content_full"), null, info.getInt("score"), info.getInt("date_posted"));
 
                         if(!items.contains(newitem)) {
                             items.add(newitem);

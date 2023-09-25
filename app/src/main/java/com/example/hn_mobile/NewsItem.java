@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import okhttp3.OkHttpClient;
@@ -17,7 +18,6 @@ import okhttp3.Response;
 
 public class NewsItem {
     private String title;
-    private int score;
     private String content;
     private String content_full;
     private String author;
@@ -28,9 +28,11 @@ public class NewsItem {
     private String content_type; // url or string
     private ArrayList<Integer> comment_ids;
     private ArrayList<CommentItem> comments;
+    private int score;
     private boolean is_saved;
+    private int date_posted;
 
-    public NewsItem(String title, int score, String content, String author, String type, int time, String content_type, String content_full, JSONArray comment_ids) {
+    public NewsItem(String title, int score, String content, String author, String type, int time, String content_type, String content_full, JSONArray comment_ids, int points, int posted) {
         this.title = title;
         this.score = score;
         this.content = String.valueOf(Html.fromHtml(content));
@@ -40,6 +42,8 @@ public class NewsItem {
         this.content_type = content_type;
         this.content_full = String.valueOf(Html.fromHtml(content_full));
         this.is_saved = false;
+        this.score = points;
+        this.date_posted = posted;
         this.comments = new ArrayList<CommentItem>();
         try {
             if(comment_ids != null) {
@@ -75,6 +79,11 @@ public class NewsItem {
     public boolean getSaved() {
         return is_saved;
     }
+
+    public int getScore() {
+        return this.score;
+    }
+    public int getDatePosted() { return this.date_posted; }
     public void loadComments() {
         if(this.comment_ids != null) {
             hnapi api = new hnapi();
@@ -115,6 +124,8 @@ public class NewsItem {
             serialized.put("type", this.type);
             serialized.put("content_type", this.content_type);
             serialized.put("comment_ids", comarray);
+            serialized.put("score", this.score);
+            serialized.put("date_posted", this.date_posted);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

@@ -27,8 +27,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
+import java.util.TimeZone;
 
 public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsItemHolder> {
     private Context context;
@@ -67,6 +70,8 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
         private TextView item_title;
         private TextView item_content;
         private TextView item_author;
+        private TextView score;
+        private TextView posted;
         private Button see_more;
         private Button comment_btn;
         private Chip read_later;
@@ -78,6 +83,8 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
             see_more = view.findViewById(R.id.see_more_btn);
             read_later = view.findViewById(R.id.read_later_chip);
             comment_btn = view.findViewById(R.id.comment_btn);
+            score = view.findViewById(R.id.point_box);
+            posted = view.findViewById(R.id.date_posted_box);
 
         }
 
@@ -86,6 +93,12 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsIt
             item_title.setText(n.getTitle());
             item_content.setText(n.getContent());
             item_author.setText("by " +n.getAuthor());
+            score.setText("Points: "+String.valueOf(n.getScore()));
+            Date d = new Date(n.getDatePosted()*1000L);
+            SimpleDateFormat form = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+            form.setTimeZone(TimeZone.getDefault());
+            String strdate = form.format(d);
+            posted.setText(strdate);
             // read save file, if exists then set to saved
             //read_later.setChecked(n.getSaved());
             if(itemIsSaved(n, context)) {

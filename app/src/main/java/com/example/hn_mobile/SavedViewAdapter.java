@@ -24,8 +24,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
+import java.util.TimeZone;
 
 public class SavedViewAdapter extends RecyclerView.Adapter<SavedViewAdapter.SavedHolder> {
     private Context context;
@@ -65,6 +68,8 @@ public class SavedViewAdapter extends RecyclerView.Adapter<SavedViewAdapter.Save
         private TextView title;
         private TextView author;
         private TextView content_short;
+        private TextView score;
+        private TextView posted;
         private Button see_more;
         private ImageButton comments;
         private ImageButton delete;
@@ -76,6 +81,8 @@ public class SavedViewAdapter extends RecyclerView.Adapter<SavedViewAdapter.Save
             see_more = itemView.findViewById(R.id.see_btn);
             comments = itemView.findViewById(R.id.comment_btn_saved);
             delete = itemView.findViewById(R.id.delete_btn);
+            score = itemView.findViewById(R.id.saved_score_box);
+            posted = itemView.findViewById(R.id.saved_date_box);
         }
 
         @SuppressLint("SetTextI18n")
@@ -83,6 +90,12 @@ public class SavedViewAdapter extends RecyclerView.Adapter<SavedViewAdapter.Save
             title.setText(n.getTitle());
             author.setText("by "+n.getAuthor());
             content_short.setText(n.getContent());
+            score.setText("Points: "+String.valueOf(n.getScore()));
+            Date d = new Date(n.getDatePosted()*1000L);
+            SimpleDateFormat form = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+            form.setTimeZone(TimeZone.getDefault());
+            String strdate = form.format(d);
+            posted.setText(strdate);
             if(n.getCommentIds() == null) {
                 /*
                 comments.setEnabled(false);

@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -84,10 +85,10 @@ public class hnapi {
         }
         NewsItem itemobj = null;
         if(info.has("kids")) {
-            itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full, info.getJSONArray("kids"));
+            itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full, info.getJSONArray("kids"), info.getInt("score"), info.getInt("time"));
             //System.out.println(info.getJSONArray("kids"));
         } else {
-            itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full, null);
+            itemobj = new NewsItem(info.getString("title"), info.getInt("score"), c, info.getString("by"), info.getString("type"), info.getInt("time"), ctype, full, null, info.getInt("score"), info.getInt("time"));
 
         }
         return itemobj;
